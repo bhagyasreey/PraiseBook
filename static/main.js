@@ -49,3 +49,4 @@ $(document).ready(function() {
         $(this).css('border-color', '').animate({ paddingLeft: '5px' }, 200);
     });
 });
+
