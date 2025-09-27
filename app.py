@@ -36,3 +36,15 @@ def init_db():
     )''')
     conn.commit()
     conn.close()
+
+@app.context_processor
+def inject_datetime():
+    from datetime import datetime
+    return {'datetime': datetime}
+
+
+@app.route('/')
+def index():
+
+    quote = random.choice(QUOTES)
+    return render_template('index.html', quote=quote)
