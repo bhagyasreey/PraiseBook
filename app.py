@@ -48,3 +48,22 @@ def index():
 
     quote = random.choice(QUOTES)
     return render_template('index.html', quote=quote)
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        description = request.form.get('description', '').strip()
+        mood = request.form.get('mood', '').strip()
+        date = request.form.get('date', '').strip() or datetime.now().strftime('%Y-%m-%d')
+        if not description:
+            return redirect(url_for('add'))
+        conn = get_db_connection()
+        conn.execute('INSERT INTO entries (title, description, mood, date) VALUES (?, ?, ?, ?)',
+                     (title, description, mood, date))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('success'))
+    return render_template('add.html')

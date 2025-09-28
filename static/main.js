@@ -50,3 +50,15 @@ $(document).ready(function() {
     });
 });
 
+$('.entry-card').on('click', function() {
+    let title = $(this).data('title');
+    let description = $(this).data('description');
+    let mood = $(this).data('mood');
+    let date = $(this).data('date');
+
+    $('#entryModalLabel').text(title);
+    $('#entryDescription').text(description);
+    $('#entryMood').text(mood);
+    $('#entryDate').text(date);
+});
+
