@@ -67,3 +67,12 @@ def add():
         conn.close()
         return redirect(url_for('success'))
     return render_template('add.html')
+
+@app.route('/view')
+def view():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    conn = get_db_connection()
+    rows = conn.execute('SELECT * FROM entries ORDER BY date DESC, id DESC').fetchall()
+    conn.close()
+    return render_template('view.html', entries=rows)

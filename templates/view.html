@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="row">
+  {% for entry in entries %}
+  <div class="col-md-6 mb-4">
+    <div class="entry-card p-3 border rounded" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#entryModal" 
+         data-title="{{ entry['title'] or 'Untitled' }}"
+         data-description="{{ entry['description'] }}"
+         data-mood="{{ entry['mood'] }}"
+         data-date="{{ entry['date'] }}">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <h5 class="mb-0">{{ entry['title'] or 'Untitled' }}</h5>
+        <small class="text-muted">{{ entry['date'] }}</small>
+      </div>
+      <p class="mb-1 text-truncate">{{ entry['description'] }}</p>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-12 text-center">
+    <p class="text-muted">No entries yet. Add your first moment of kindness.</p>
+  </div>
+  {% endfor %}
+</section>
+
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content entry-modal-content rounded-4 shadow">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="entryModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="entryDescription" class="fs-5"></p>
+        <small class="text-muted" id="entryMood"></small>
+      </div>
+      <div class="modal-footer border-top-0">
+        <small class="text-muted me-auto" id="entryDate"></small>
+        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
