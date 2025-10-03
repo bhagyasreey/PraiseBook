@@ -76,3 +76,52 @@ def view():
     rows = conn.execute('SELECT * FROM entries ORDER BY date DESC, id DESC').fetchall()
     conn.close()
     return render_template('view.html', entries=rows)
+
+@app.route('/success')
+def success():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('success.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        if username and password:
+            conn = get_db_connection()
+            try:
+                conn.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+                conn.commit()
+            except sqlite3.IntegrityError:
+                conn.close()
+                return render_template('register.html', error='Username already exists')
+            conn.close()
+            return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password)).fetchone()
+        conn.close()
+        if user:
+            session['user_id'] = user['id']
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error='Invalid credentials')
+    return render_template('login.html')
+
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True)
