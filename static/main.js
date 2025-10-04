@@ -62,3 +62,14 @@ $('.entry-card').on('click', function() {
     $('#entryDate').text(date);
 });
 
+$('#toggleMode').click(function() {
+    $('body').toggleClass('dark-mode');
+    let mode = $('body').hasClass('dark-mode') ? 'dark' : 'light';
+    localStorage.setItem('theme', mode);
+});
+
+$(document).ready(function() {
+    if (localStorage.getItem('theme') === 'dark') {
+        $('body').addClass('dark-mode');
+    }
+});
